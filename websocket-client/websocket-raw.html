@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+    <script type="text/javascript">
+        var socket;
+
+        function connect() {
+            // 更换为您的WebSocket端点
+            socket = new WebSocket("ws://localhost:80/websocket");
+
+            socket.onopen = function(event) {
+                writeToScreen("Connected!");
+            };
+
+            socket.onmessage = function(event) {
+                writeToScreen("Received: " + event.data);
+            };
+
+            socket.onclose = function(event) {
+                writeToScreen("Disconnected.");
+            };
+        }
+
+        function disconnect() {
+            if (socket) {
+                socket.close();
+            }
+        }
+
+        function sendMessage() {
+            var message = document.getElementById("messageInput").value;
+            socket.send(message);
+            writeToScreen("Sent: " + message);
+        }
+
+        function writeToScreen(message) {
+            var output = document.getElementById("output");
+            var para = document.createElement("p");
+            para.innerHTML = message;
+            output.appendChild(para);
+        }
+    </script>
+</head>
+<body>
+    <h2>WebSocket Test</h2>
+
+    <button onclick="connect();">Connect</button>
+    <button onclick="disconnect();">Disconnect</button>
+    <button onclick="sendMessage();">Send Message</button>
+    <input type="text" id="messageInput" placeholder="Enter message">
+
+    <div id="output"></div>
+</body>
+</html>
